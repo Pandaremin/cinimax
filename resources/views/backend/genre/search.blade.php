@@ -1,26 +1,27 @@
 @extends('backend.layout')
 @section('main')
 <div class="pagetitle">
-      <h1>Genre</h1>
-      <nav>
+    <h1>Genre</h1>
+    <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
           <li class="breadcrumb-item active">Search</li>
         </ol>
-      </nav>
-    </div><!-- End Page Title -->
-@if($data->isNotEmpty())
+    </nav>
+</div><!-- End Page Title -->
+
+@if($genre->isNotEmpty())
 <div class="card-headingg">
     <div class="row">
         <div class="col-1 text-center">
-        ID
+        Id
         </div>
         <div class="col-9">
         Title
         </div>
     </div>
 </div>
-@foreach($data as $genre)
+@foreach($genre as $genre)
     <div class="card-bodyy">
         <div class="row">
             <div class="col-1 text-center">
@@ -38,8 +39,8 @@
     
 @endforeach
 @else 
-    <div>
-        <h2>No posts found</h2>
+    <div class="d-flex justify-content-center">
+        <h5 style="color:grey;">No item match your search</h5>
     </div>
 @endif
 

@@ -52,8 +52,8 @@
     
 @endforeach
 @else 
-    <div>
-        <h2>No movie found</h2>
+    <div class="d-flex justify-content-center">
+        <h5 style="color:grey;">No item match your search</h5>
     </div>
 @endif
 

@@ -4,7 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Gate;
+
 class AuthRole
 {
     /**
@@ -16,7 +17,7 @@ class AuthRole
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->role === 'admin' or Auth::user()->role === 'content_manager') {
+        if (Gate::any(['isAdmin','isWriter'])) {
             return $next($request);
         }
         return to_route('login');

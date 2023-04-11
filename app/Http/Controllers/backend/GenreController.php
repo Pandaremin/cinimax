@@ -3,102 +3,86 @@
 namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Auth;
 use App\Models\Genre;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
+
 
 class GenreController extends Controller
 {
     
     public function index()
     {
-        $id = Auth::user()->id;
-        $user = User::find($id);
-
         $genre = Genre::all();
-        return view('backend.genre.index',compact(['user','genre']));
+        return view('backend.genre.index',compact('genre'));
     }
 
     
     public function create()
     {
-        $id = Auth::user()->id;
-        $user = User::find($id);
-        return view('backend.genre.create',compact('user'));
+        abort_if(Gate::denies('isAdmin'), 403);
+        return view('backend.genre.create');
     }
 
     
     public function store(Request $request)
     {
-        $id = Auth::user()->id;
-        $user = User::find($id);
-
+        abort_if(Gate::denies('isAdmin'), 403);
         $validatedData = $request->validate([
             'title' => 'required',
         ]);
         $genreadd = new Genre();
     	$genreadd->title = $request->title;
         $genreadd->save();
-        $genre = Genre::all();
-        $notification = array(
+        $notification = [
             'message' => 'Genre created successfully',
             'alert-type' => 'success'
-        );
+        ];
         return redirect()->route('genre.index')->with($notification);
         
     }
-
-    
-    public function show($id)
-    {
-        //
-    }
-
     
     public function edit($id)
     {
-        $idd = Auth::user()->id;
-        $user = User::find($idd);
+        abort_if(Gate::denies('isAdmin'), 403);
         $data=Genre::find($id);
-        
-        return view('backend.genre.edit',compact(['data','user']));
+        return view('backend.genre.edit',compact('data'));
     }
 
     
     public function update(Request $request, $id)
     {
-        $idd = Auth::user()->id;
-        $user = User::find($idd);
-
+        abort_if(Gate::denies('isAdmin'), 403);
         $validatedData = $request->validate([
             'title' => 'required',
         ]);
         $data=Genre::find($id);
         $data->title=$request->title;
         $data->save();
-        $genre = Genre::all();
-        
-        $notification = array(
+        $notification = [
             'message' => 'Genre edited successfully',
             'alert-type' => 'success'
-        );
+        ];
         return redirect()->route('genre.index')->with($notification);
     }
 
     public function destroy($id)
     {
-        $data=Genre::find($id)->delete();
-        return redirect()->route('genre.index')->with('success','Genre deleted successfully');
+        abort_if(Gate::denies('isAdmin'), 403);
+        $data=Genre::find($id);
+        $data->contents()->detach();
+        $data->delete();
+        $notification = [
+            'message' => 'Genre deleted successfully',
+            'alert-type' => 'success'
+        ];
+        return back()->with($notification);
     }
 
-    public function search(Request $request){
-        $idd = Auth::user()->id;
-        $user = User::find($idd);
+    public function search(Request $request)
+    {
         $search = $request->input('title');
-    
-        $data = Genre::query()->where('title', 'LIKE', "%{$search}%")->get();
-    
-        // Return the search view with the resluts compacted
-        return view('backend.genre.search', compact(['data','user']));
+        $genre = Genre::query()->where('title', 'LIKE', "%{$search}%")->get();
+        return view('backend.genre.search', compact('genre'));
     }
 }

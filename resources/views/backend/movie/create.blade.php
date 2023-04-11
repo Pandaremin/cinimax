@@ -30,40 +30,66 @@
                     <!-- Multi Columns Form -->
                     <div class="row">
                         <div class="col-md-12">
-                            <label for="title" class="form-label">Title</label>
+                            <label for="title" class="form-label mb-1 mx-1">Title</label>
                             <input type="text" class="form-control" id="title" name="title" placeholder="Movie title">
+                            @error('title')
+                                <p class="text-danger px-2 mb-0">{{$message}}</p>
+                            @enderror
                         </div>
                         <div class="col-md-12">
-                            <label for="cover" class="form-label">Cover</label>
+                            <label for="cover" class="form-label mt-3 mb-1 mx-1">Cover</label>
                             <input type="text" class="form-control" id="cover" name="cover" placeholder="Poster link">
+                            @error('cover')
+                                <p class="text-danger px-2 mb-0">{{$message}}</p>
+                            @enderror
                         </div>
                         <div class="col-md-12">
-                            <label for="genre" class="form-label">Genres</label>
-                            <select class="selectpicker form-control" style="background: #5cb85c; color: #fff;" id="genre" name="genre[]" multiple title="Choose one of the following...">
-                                @foreach($genre as $genre)
-                                <option value="{{$genre->id}}">{{$genre->title}}</option>
-                                @endforeach
-                            </select>
+                            <label for="genre" class="form-label mt-3 mb-1 mx-1">Genres</label>
+                            <div class="d-flex align-items-center" style="border-radius:5px;border:1px solid #ced4da;">
+                                <select class="selectpicker form-control" style="background: #5cb85c; color: #fff;" id="genre" name="genre[]" multiple title="Choose one of the following...">
+                                    @foreach($genre as $genre)
+                                    <option value="{{$genre->id}}">{{$genre->title}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @error('genre')
+                                <p class="text-danger px-2 mb-0">{{$message}}</p>
+                            @enderror
                         </div>
                         <div class="col-md-12">
-                            <label for="overview" class="form-label">Overview</label>
+                            <label for="overview" class="form-label mt-3 mb-1 mx-1">Overview</label>
                             <textarea class="form-control" placeholder="Overview" id="overview" name="overview" placeholder="Movie overview" style="height: 100px;"></textarea>
+                            @error('overview')
+                                <p class="text-danger px-2 mb-0">{{$message}}</p>
+                            @enderror
                         </div>
                         <div class="col-md-4">
-                            <label for="rating" class="form-label">Rating</label>
-                            <input type="number" class="form-control" id="rating" name="rating" placeholder="Rating">
+                            <label for="rating" class="form-label mt-3 mb-1 mx-1">Rating</label>
+                            <input type="float" class="form-control" id="rating" name="rating" placeholder="Rating">
+                            @error('rating')
+                                <p class="text-danger px-2 mb-0">{{$message}}</p>
+                            @enderror
                         </div>
                         <div class="col-md-4 col-lg-4">
-                            <label for="release_date" class="form-label">Release Date</label>
+                            <label for="release_date" class="form-label mt-3 mb-1 mx-1">Release Date</label>
                             <input type="text" class="form-control" id="release_date" name="release_date" placeholder="Release date">
+                            @error('release_date')
+                                <p class="text-danger px-2 mb-0">{{$message}}</p>
+                            @enderror
                         </div>
                         <div class="col-md-4">
-                            <label for="duration" class="form-label">Duration</label>
+                            <label for="duration" class="form-label mt-3 mb-1 mx-1">Duration</label>
                             <input type="text" class="form-control" id="duration" name="duration" placeholder="Duration">
+                            @error('duration')
+                                <p class="text-danger px-2 mb-0">{{$message}}</p>
+                            @enderror
                         </div>
                         <div class="col-12">
-                            <label for="trailer" class="form-label">Trailer</label>
+                            <label for="trailer" class="form-label mt-3 mb-1 mx-1">Trailer</label>
                             <input type="text" class="form-control" id="trailer" name="trailer" placeholder="Trailer link">
+                            @error('trailer')
+                                <p class="text-danger px-2 mb-0">{{$message}}</p>
+                            @enderror
                         </div>
                     </div>    
                 </div>

@@ -18,29 +18,22 @@ class UserManagementController extends Controller
         return view('backend.user-management.profile',compact('user'));
     }
 
-    
     public function passwordUpdate(Request $request){
         $validatedData = $request->validate([
            'oldpassword' => 'required',
            'password' => 'required|confirmed',
        ]);
 
-    //    $id = Auth::user()->id;
-    //    $data = User::find($id);
-    //    $data->name = $request->name;
-    //    $data->save();
        $hashedPassword = Auth::user()->password;
        if (Hash::check($request->oldpassword,$hashedPassword)) {
            $user = User::find(Auth::id());
            $user->password = Hash::make($request->password);
            $user->save();
-        //    Auth::logout();
-        //    return redirect()->route('login');
+           Auth::logout();
+           return redirect()->route('login');
        }else{
            return redirect()->back();
        }
-
-
     }
 
     public function userIndex()
@@ -80,19 +73,8 @@ class UserManagementController extends Controller
         $useradd->save();
     	// $code = rand(0000,9999);
         
-        return view('backend.user-management.content-manager-add',compact('user'));
+        return view('backend.user-management.user-view',compact('user'));
     }
-
-    // public function store(Request $request)
-    // {
-    //     //
-    // }
-
-    
-    // public function show($id)
-    // {
-    //     //
-    // }
 
     
     public function userEdit($id)
@@ -114,7 +96,6 @@ class UserManagementController extends Controller
         return redirect()->route('admin.users.view');
     }
 
-    
     public function userDestroy($id)
     {
         $data=User::find($id)->delete();

@@ -6,22 +6,13 @@ use App\Http\Controllers\Backend\AdminDashboardController;
 use App\Http\Controllers\Backend\GenreController;
 use App\Http\Controllers\Backend\MovieController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+
 // User
 Route::get('/', function () {
     return view('frontend.layout');
 })->name('user.dashboard');
 
-
+// Admin
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -29,7 +20,7 @@ Route::middleware([
     'authRole'
 ])->prefix('admin')->group(function () {
 
-    // Admin and Writer
+    // Admin and Writer access
     // Manage Profile
     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.index');
     Route::get('/profile', [UserManagementController::class, 'profile'])->name('admin.profile');

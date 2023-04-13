@@ -5,24 +5,19 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Genre;
 use App\Http\Requests\GenreRequest;
-
+use Alert;
 
 class GenreController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('can:isAdmin')->except('index');
-    }
+    
 
     public function index(Request $request)
     {
+        $genres = Genre::oldest();
         if($request->search) {
-            $genres = Genre::where('title', 'LIKE', "%{$request->search}%")->paginate();
+            $genres = Genre::where('title', 'LIKE', "%{$request->search}%");
         }
-        else{
-            $genres = Genre::oldest()->paginate(10);
-        }
-        return view('backend.genre.index', ['genres' => $genres]);
+        return view('backend.genre.index', ['genres' => $genres->get()]);
     }
 
     public function create()
@@ -34,11 +29,8 @@ class GenreController extends Controller
     {
         $validated = $request->validated();
         Genre::create($validated);
-        $notification = [
-            'message' => 'Genre created successfully',
-            'alert-type' => 'success'
-        ];
-        return to_route('genre.index')->with($notification);
+        Alert::toast('Genre Updated successfully');
+        return to_route('genre.index');
     }
     
     public function edit(Genre $genre)
@@ -49,23 +41,16 @@ class GenreController extends Controller
     public function update(GenreRequest $request, Genre $genre)
     {
         $validated = $request->validated();
-        $genre->title=$request->title;
-        $genre->save();
-        $notification = [
-            'message' => 'Genre edited successfully',
-            'alert-type' => 'success'
-        ];
-        return to_route('genre.index')->with($notification);
+        $genre->update($validated);
+        Alert::toast('Genre Updated successfully');
+        return to_route('genre.index');
     }
 
     public function destroy(Genre $genre)
     {
         $genre->contents()->detach();
         $genre->delete();
-        $notification = [
-            'message' => 'Genre deleted successfully',
-            'alert-type' => 'success'
-        ];
-        return back()->with($notification);
+        Alert::toast('Genre deleted successfully');
+        return back();
     }
 }

@@ -1,6 +1,6 @@
 @extends('backend.layout')
 @section('main')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 
 <div class="pagetitle">
     <nav>
@@ -65,7 +65,7 @@
                         </div>
                         <div class="col-md-4">
                             <label for="rating" class="form-label mt-3 mb-1 mx-1">Rating</label>
-                            <input type="float" class="form-control" id="rating" name="rating" placeholder="Rating">
+                            <input type="number" step=".1" min="0" max="10" class="form-control" id="rating" name="rating" placeholder="Rating">
                             @error('rating')
                                 <p class="text-danger px-2 mb-0">{{$message}}</p>
                             @enderror
@@ -190,7 +190,7 @@
         </div>
     </div>
 </div>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
  	$(document).ready(function(){
  		var counter = 0;

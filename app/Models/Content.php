@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Content extends Model
 {
     use HasFactory;
+    protected $fillable = ['title','cover','poster','release_date','rating','duration','overview','view','trailer','publish','featured','premium_only','content_type','user_id'];
 
     public function genres(){
         return $this->belongsToMany(Genre::class,'content_genre');

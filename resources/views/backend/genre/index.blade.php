@@ -59,5 +59,4 @@
         <h4>No genre found</h4>
     </div>
 @endif
-<div class="d-flex justify-content-center">{{ $genres->links() }}</div>
 @endsection

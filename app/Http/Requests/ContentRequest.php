@@ -34,8 +34,11 @@ class ContentRequest extends FormRequest
             'content_type' => 'required',
             'publish' => 'required|boolean',
             'featured' => 'required|boolean',
-            'member_only' => 'required|boolean',
+            'premium_only' => 'required|boolean',
             'genre' => 'required',
+            'linktitle' => 'required',
+            'type' => 'required',
+            'link' => 'required',
         ];
     }
 }

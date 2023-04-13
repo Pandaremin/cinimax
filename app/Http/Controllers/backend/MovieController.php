@@ -9,6 +9,8 @@ use App\Models\Genre;
 use App\Models\Content;
 use App\Models\MovieLink;
 use DB;
+use App\Http\Requests\ContentRequest;
+
 
 class MovieController extends Controller
 {
@@ -27,56 +29,26 @@ class MovieController extends Controller
         return view('backend.movie.create', compact('genre'));
     }
 
-
-    public function store(Request $request)
+    public function store(ContentRequest $request)
     {
-        DB::transaction(function () use ($request) {
-            $validatedData = $request->validate([
-                'title' => 'required',
-                'cover' => 'required',
-                'overview' => 'required',
-                'rating' => 'required',
-                'release_date' => 'required',
-                'duration' => 'required',
-                'trailer' => 'required',
-                'genre' => 'required',
-            ]);
-
-            $movieadd               = new Content();
-            $movieadd->title        = $request->title;
-            $movieadd->cover        = $request->cover;
-            $movieadd->poster       = $request->cover;
-            $movieadd->overview     = $request->overview;
-            $movieadd->rating       = $request->rating;
-            $movieadd->release_date = $request->release_date;
-            $movieadd->duration     = $request->duration;
-            $movieadd->trailer      = $request->trailer;
-            $movieadd->publish      = $request->has('publish');
-            $movieadd->featured     = $request->has('featured');
-            $movieadd->premium_only = $request->has('premium_only');
-            $movieadd->content_type = $request->content_type;
-            auth()->user()->contents()->save($movieadd);
-
-            $movieadd->genres()->attach($request->genre);
-
-            $lastmovie = Content::latest()->first();
-            $countLink = count($request->link);
-
-            if ($countLink !=null) {
-                for ($i=0; $i <$countLink ; $i++) {
-                    $movielink = new MovieLink();
-                    $movielink->linktitle = $request->linktitle[$i];
-                    $movielink->type = $request->type[$i];
-                    $movielink->link = $request->link[$i];
-                    $lastmovie->movielinks()->save($movielink);
-                } // End For Loop
-            }//
-        });
-        $notification = [
-            'message' => 'Movie created successfully',
-            'alert-type' => 'success'
-        ];
-        return to_route('movie.index')->with($notification);
+        // Movie add
+        $validated = $request->safe()->except(['genre', 'linktitle','type','link']);
+        $movieadd = new Content($validated);
+        auth()->user()->contents()->save($movieadd);
+        // Link Movie and genre
+        $movieadd->genres()->attach($request->genre);
+        // Add link to movie
+        $currentmovie = Content::latest()->first();
+        $countLink = count($request->link);
+        for ($i=0; $i <$countLink ; $i++) {
+            $movielink = new MovieLink();
+            $movielink->linktitle = $request->linktitle[$i];
+            $movielink->type = $request->type[$i];
+            $movielink->link = $request->link[$i];
+            $currentmovie->movielinks()->save($movielink);
+        } // End For Loop
+        Alert::toast('Movie created successfully');
+        return to_route('movie.index');
     }
 
     public function edit($id)
@@ -88,21 +60,11 @@ class MovieController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function update(Request $request,Content $content)
     {
         DB::transaction(function () use ($request, $id) {
-            $validatedData = $request->validate([
-                    'title' => 'required',
-                    'cover' => 'required',
-                    'overview' => 'required',
-                    'rating' => 'required',
-                    'release_date' => 'required',
-                    'duration' => 'required',
-                    'trailer' => 'required',
-                ]);
-
-            $movieupdate=Content::find($id);
-            abort_if(Gate::none(['update','isAdmin'], $movieupdate), 403);
+            $validatedData = $request->safe()->except(['genre', 'linktitle','type','link']);
+            abort_if(Gate::none(['update','isAdmin'], $content), 403);
             $movieupdate->title = $request->title;
             $movieupdate->cover = $request->cover;
             $movieupdate->poster = $request->cover;

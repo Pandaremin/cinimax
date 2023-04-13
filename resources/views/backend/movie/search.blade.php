@@ -45,7 +45,7 @@
             </div>
             <div class="col-2 d-flex justify-content-around align-items-center">
             <a href="{{ route('movie.edit',$movie->id) }}"><i class="fa-solid fa-pen-to-square me-3"></i></a>
-            <a href="{{ route('movie.delete',$movie->id) }}"><i class="fa-solid fa-trash me-4"></i></a>
+            <a href="{{ route('movie.destroy',$movie->id) }}"><i class="fa-solid fa-trash me-4"></i></a>
             </div>
         </div>
     </div>

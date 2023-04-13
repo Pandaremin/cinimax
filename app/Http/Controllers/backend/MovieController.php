@@ -3,35 +3,34 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use App\Models\Genre;
-use App\Models\User;
 use App\Models\Content;
 use App\Models\MovieLink;
 use DB;
-use Illuminate\Support\Facades\Gate;
 
 class MovieController extends Controller
 {
-    
-    public function index()
+    public function index(Request $request)
     {
-        $data = Content::with('user')->paginate(20);
-        return view('backend.movie.index',compact('data'));
+        $movies = Content::with('user')->where('content_type', 'movie')->latest();
+        if($request->search) {
+            $movies->where('title', 'LIKE', "%{$request->search}%")->with('user');
+        }
+        return view('backend.movie.index', ['movies' => $movies->get()]);
     }
 
-    
     public function create()
     {
         $genre = Genre::all();
-        return view('backend.movie.create',compact('genre'));
+        return view('backend.movie.create', compact('genre'));
     }
 
-    
+
     public function store(Request $request)
     {
-        DB::transaction(function() use($request){
-
+        DB::transaction(function () use ($request) {
             $validatedData = $request->validate([
                 'title' => 'required',
                 'cover' => 'required',
@@ -62,9 +61,9 @@ class MovieController extends Controller
 
             $lastmovie = Content::latest()->first();
             $countLink = count($request->link);
-            
-            if ($countLink !=NULL) {
-                for ($i=0; $i <$countLink ; $i++) { 
+
+            if ($countLink !=null) {
+                for ($i=0; $i <$countLink ; $i++) {
                     $movielink = new MovieLink();
                     $movielink->linktitle = $request->linktitle[$i];
                     $movielink->type = $request->type[$i];
@@ -77,34 +76,33 @@ class MovieController extends Controller
             'message' => 'Movie created successfully',
             'alert-type' => 'success'
         ];
-        return redirect()->route('movie.index')->with($notification);
+        return to_route('movie.index')->with($notification);
     }
 
     public function edit($id)
     {
         $data=Content::with(['genres','movielinks'])->find($id);
-        abort_if(Gate::none(['update','isAdmin'],$data), 403);
+        abort_if(Gate::none(['update','isAdmin'], $data), 403);
         $genre = Genre::all();
-        return view('backend.movie.edit',compact(['data','genre']));
+        return view('backend.movie.edit', compact(['data','genre']));
     }
 
-   
+
     public function update(Request $request, $id)
     {
-        DB::transaction(function() use($request,$id){
-
+        DB::transaction(function () use ($request, $id) {
             $validatedData = $request->validate([
-                'title' => 'required',
-                'cover' => 'required',
-                'overview' => 'required',
-                'rating' => 'required',
-                'release_date' => 'required',
-                'duration' => 'required',
-                'trailer' => 'required',
-            ]);
+                    'title' => 'required',
+                    'cover' => 'required',
+                    'overview' => 'required',
+                    'rating' => 'required',
+                    'release_date' => 'required',
+                    'duration' => 'required',
+                    'trailer' => 'required',
+                ]);
 
-            $movieupdate=Content::find($id); 
-            abort_if(Gate::none(['update','isAdmin'],$movieupdate), 403);
+            $movieupdate=Content::find($id);
+            abort_if(Gate::none(['update','isAdmin'], $movieupdate), 403);
             $movieupdate->title = $request->title;
             $movieupdate->cover = $request->cover;
             $movieupdate->poster = $request->cover;
@@ -122,9 +120,9 @@ class MovieController extends Controller
             $movieupdate->genres()->sync($request->genre);
 
             $countLink = count($request->linktitle);
-            MovieLink::where('content_id',$id)->delete();
-            if ($countLink !=NULL) {
-                for ($i=0; $i <$countLink ; $i++) { 
+            MovieLink::where('content_id', $id)->delete();
+            if ($countLink !=null) {
+                for ($i=0; $i <$countLink ; $i++) {
                     $movielink = new  MovieLink();
                     $movielink->linktitle = $request->linktitle[$i];
                     $movielink->type = $request->type[$i];
@@ -134,19 +132,18 @@ class MovieController extends Controller
                 } // End For Loop
             }//
         });
-        
+
         $notification = [
             'message' => 'Movie edited successfully',
             'alert-type' => 'success'
         ];
-        return redirect()->route('movie.index')->with($notification);
+        return to_route('movie.index')->with($notification);
     }
 
-   
     public function destroy($id)
     {
         $movie=Content::find($id);
-        abort_if(Gate::none(['delete','isAdmin'],$data), 403);
+        abort_if(Gate::none(['delete','isAdmin'], $data), 403);
         $movie->genres()->detach();
         $movie->delete();
         $notification = [
@@ -155,15 +152,4 @@ class MovieController extends Controller
         ];
         return back()->with($notification);
     }
-
-    public function search(Request $request){
-        $idd = Auth::user()->id;
-        $user = User::find($idd);
-        $search = $request->input('title');
-    
-        $data = Content::query()->where('title', 'LIKE', "%{$search}%")->with('user')->get();
-
-        return view('backend.movie.search', compact(['data','user']));
-    }
-
 }

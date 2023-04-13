@@ -36,11 +36,9 @@ Route::middleware([
     Route::post('/update/password', [UserManagementController::class, 'passwordUpdate'])->name('admin.password.update');
 
     // Genre
-    Route::get('search/genre', [GenreController::class, 'search'])->name('genre.search');
     Route::resource('genre',GenreController::class);
 
     // Movies
-    Route::get('search/movie', [MovieController::class, 'search'])->name('movie.search');
     Route::resource('movie',MovieController::class);
 
 });

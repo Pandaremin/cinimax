@@ -10,16 +10,16 @@
     </nav>
 </div><!-- End Page Title -->
 
-<form action="{{ route('genre.search') }}" method="get">
+<form action="" method="get">
     <div class="genre-add-search mt-4">
         @can('isAdmin')
         <a href="{{ route('genre.create') }}"><button type="button" class="btn btn-add" ><i class="fa-solid fa-plus me-1"></i></button></a>
         @endcan
-        <input type="text" class="form-control genre-input" name="title" placeholder="Search...">
+        <input type="text" class="form-control genre-input" name="search" placeholder="Search..." value="{{request('search')}}">
     </div>
 </form>
 
-@if($genre->isNotEmpty())
+@if($genres->isNotEmpty())
 <div class="card-headingg">
     <div class="row">
         <div class="col-1 text-center">
@@ -31,7 +31,7 @@
     </div>
 </div>
 
-@foreach($genre as $genre)
+@foreach($genres as $genre)
     <form action="{{ route('genre.destroy',$genre->id) }}" method="post">
     @csrf
     @method('DELETE')
@@ -59,5 +59,5 @@
         <h4>No genre found</h4>
     </div>
 @endif
-
+<div class="d-flex justify-content-center">{{ $genres->links() }}</div>
 @endsection

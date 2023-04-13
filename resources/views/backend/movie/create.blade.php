@@ -132,14 +132,17 @@
         <div class="col-md-3 mt-3">
             <p class="text-start mb-1">Advanced</p>
             <div class="form-switch">
+                <input type="hidden" name="publish" value="0">
                 <input class="form-check-input" type="checkbox" id="publish" name="publish" value="1" checked>
                 <label class="form-check-label" for="publish">Publish</label>
             </div>
             <div class="form-switch">
+                <input type="hidden" name="featured" value="0">
                 <input class="form-check-input" type="checkbox" id="featured" name="featured" value="1">
                 <label class="form-check-label" for="featured">Featured</label>
             </div>
             <div class="form-switch">
+                <input type="hidden" name="premium_only" value="0">
                 <input class="form-check-input" type="checkbox" id="premium-only" name="premium_only" value="1">
                 <label class="form-check-label" for="premium-only">Premium</label>
             </div>
@@ -155,9 +158,7 @@
 <div style="visibility:hidden;">
     <div class="whole_extra_item_add" id="whole_extra_item_add">
         <div class="delete_whole_extra_item_add" id="delete_whole_extra_item_add">
-            <div class="row">
-                <div class="col-12">
-                    
+            
                         <div class="card-bodyy">
                             <div class="row g-3 d-flex align-items-center">
                                 <div class="col-12 col-md-4 text-center">
@@ -185,8 +186,7 @@
                             </div>
                         </div>
                     
-                </div>
-            </div>
+                
         </div>
     </div>
 </div>

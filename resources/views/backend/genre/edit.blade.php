@@ -13,12 +13,15 @@
 
 <div class="card">
     <div class="card-body">
-        <form class="row g-3" method="post" action="{{route('genre.update',$data->id)}}">
+        <form class="row g-3" method="post" action="{{route('genre.update',$genre->id)}}">
             @csrf
             @method('PUT')
             <div class="col-12 mt-4">
                 <label for="title" class="form-label mt-2 mb-1 ms-2">Title</label>
-                <input type="text" class="form-control p-4" id="title" name="title" value="{{$data->title}}" >
+                <input type="text" class="form-control p-4" id="title" name="title" value="{{$genre->title}}" >
+                @error('title')
+                    <p class="text-danger px-2 mb-0">{{$message}}</p>
+                @enderror
             </div>
             
             <div class="text-center">

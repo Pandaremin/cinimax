@@ -1,7 +1,5 @@
 @extends('backend.layout')
 @section('main')
-
-
 <div class="pagetitle">
     <nav>
         <ol class="breadcrumb">
@@ -46,7 +44,7 @@
                         <div class="col-md-12">
                             <label for="genre" class="form-label mt-3 mb-1 mx-1">Genres</label>
                             <div class="d-flex align-items-center" style="border-radius:5px;border:1px solid #ced4da;">
-                                <select class="selectpicker form-control" style="background: #5cb85c; color: #fff;" id="genre" name="genre[]" multiple title="Choose one of the following...">
+                                <select class="form-select" data-placeholder="Choose genre"  multiple id="genre" name="genre[]" multiple >
                                     @foreach($genre as $genre)
                                     <option value="{{$genre->id}}">{{$genre->title}}</option>
                                     @endforeach
@@ -101,11 +99,10 @@
                                     <div class="row g-3 d-flex align-items-center">
                                         <div class="col-12 col-md-4 text-center">
                                             <select id="inputState" title="Select server" name="linktitle[]" class="form-select">
-                                                <option>StreamSB</option>
-                                                <option>StreamTape</option>
-                                                <option>Google drive</option>
-                                                <option>StreamHide</option>
-                                                <option>FEmbed</option>
+                                                @foreach($streamingServices as $streamingService)  
+                                                    <option>{{$streamingService->title}}</option>
+                                                @endforeach
+                                        </select>
                                             </select>
                                         </div>
                                         <div class="col-12 col-md-3" style="font-weight:600;">
@@ -163,11 +160,9 @@
                             <div class="row g-3 d-flex align-items-center">
                                 <div class="col-12 col-md-4 text-center">
                                     <select id="inputState" title="Select server" name="linktitle[]" class="form-select">
-                                        <option>StreamSB</option>
-                                        <option>StreamTape</option>
-                                        <option>Google drive</option>
-                                        <option>StreamHide</option>
-                                        <option>FEmbed</option>
+                                        @foreach($streamingServices as $streamingService)  
+                                            <option>{{$streamingService->title}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-12 col-md-3">
@@ -190,7 +185,7 @@
         </div>
     </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+@push('scripts')
 <script type="text/javascript">
  	$(document).ready(function(){
  		var counter = 0;
@@ -206,4 +201,14 @@
 
  	});
  </script>
+ <script>
+    $( '#genre' ).select2( {
+    theme: "bootstrap-5",
+    // width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+    placeholder: $( this ).data( 'placeholder' ),
+    closeOnSelect: false,
+    } );
+ </script>
+@endpush
+
 @endsection

@@ -1,7 +1,5 @@
 @extends('backend.layout')
 @section('main')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
 <div class="pagetitle">
       
       <nav>
@@ -12,7 +10,7 @@
         </ol>
       </nav>
     </div><!-- End Page Title -->
-    <form method="post" action="{{route('movie.update',$data->id)}}">
+    <form method="post" action="{{route('movie.update',$data->slug)}}">
     @csrf
     @method('PUT')
     <div class="row">
@@ -47,7 +45,7 @@
                         <div class="col-md-12">
                             <label for="genre" class="form-label">Genres</label>
                             <div class="d-flex align-items-center" style="border-radius:5px;border:1px solid #ced4da;">
-                                <select class="selectpicker form-control " style="background-color: #5cb85c; color: #fff;" id="genre" name="genre[]" multiple>
+                                <select class="form-select" data-placeholder="Choose genre" id="genre" name="genre[]" multiple>
                                     @foreach($genre as $genre)
                                     <option value="{{$genre->id}}" @foreach($data->genres as $genres) @if($genres->id === $genre->id)selected="selected" @endif @endforeach }}>{{$genre->title}}</option>
                                     @endforeach
@@ -139,14 +137,17 @@
         <div class="col-md-3 mt-3">
             <p class="text-start mb-1">Advanced</p>
             <div class="form-switch">
+                <input type="hidden" name="publish" value="0">
                 <input class="form-check-input" type="checkbox" id="publish" name="publish" value="1"  {{$data->publish === 1 ? "checked" : ""}}>
                 <label class="form-check-label" for="publish">Publish</label>
             </div>
             <div class="form-switch">
+                <input type="hidden" name="featured" value="0">
                 <input class="form-check-input" type="checkbox" id="featured" name="featured" value="1" {{$data->featured === 1 ? "checked" : ""}}>
                 <label class="form-check-label" for="featured">Featured</label>
             </div>
             <div class="form-switch">
+                <input type="hidden" name="premium_only" value="0">
                 <input class="form-check-input" type="checkbox" id="premium-only" name="premium_only" value="1" {{$data->premium_only === 1 ? "checked" : ""}}>
                 <label class="form-check-label" for="premium-only">Premium</label>
             </div>
@@ -198,7 +199,7 @@
         </div>
     </div>
 </div>
-
+@push('scripts')
 <script type="text/javascript">
  	$(document).ready(function(){
  		var counter = 0;
@@ -214,5 +215,13 @@
 
  	});
  </script>
-
+ <script>
+    $( '#genre' ).select2( {
+    theme: "bootstrap-5",
+    // width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+    placeholder: $( this ).data( 'placeholder' ),
+    closeOnSelect: false,
+    } );
+ </script>
+@endpush
 @endsection

@@ -32,7 +32,7 @@
     </div>
 </div>
 @foreach($movies as $movie)
-<form action="{{ route('movie.destroy',$movie->id) }}" method="post">
+<form action="{{ route('movie.destroy',$movie->slug) }}" method="post">
     @csrf
     @method('DELETE')
     <div class="card-bodyy">
@@ -56,7 +56,7 @@
             <div class="filter">
                 <a class="icon" href="#" data-bs-toggle="dropdown"><i class="fa-solid fa-ellipsis-vertical" style="width:40px;height:40px;display:flex;justify-content:center;align-items:center;"></i></a>
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="text-center"><a href="{{ route('movie.edit',$movie->id) }}">Edit</a></li>
+                <li class="text-center"><a href="{{ route('movie.edit',$movie->slug) }}">Edit</a></li>
                 <li class="d-flex justify-content-center"><button type="submit" class="btn btncolor text-danger"><b>Delete</b></button></li>
               </ul>
             </div>

@@ -22,7 +22,7 @@ class UserManagementController extends Controller
         $validatedData = $request->validate([
            'oldpassword' => 'required',
            'password' => 'required|confirmed',
-       ]);
+        ]);
 
        $hashedPassword = Auth::user()->password;
        if (Hash::check($request->oldpassword,$hashedPassword)) {

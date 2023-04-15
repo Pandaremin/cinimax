@@ -5,7 +5,7 @@ use App\Http\Controllers\Backend\UserManagementController;
 use App\Http\Controllers\Backend\AdminDashboardController;
 use App\Http\Controllers\Backend\GenreController;
 use App\Http\Controllers\Backend\MovieController;
-
+use App\Http\Controllers\Backend\StreamingServiceController;
 
 // User
 Route::get('/', function () {
@@ -31,6 +31,9 @@ Route::middleware([
 
     // Movies
     Route::resource('movie',MovieController::class);
+
+    // StreamingService
+    Route::resource('streamingservice',StreamingServiceController::class);
 
 });
 

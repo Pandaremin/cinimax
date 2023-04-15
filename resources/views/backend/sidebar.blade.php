@@ -43,6 +43,13 @@
       </a>
     </li><!-- End Genre Nav -->
 
+    <li class="nav-item">
+      <a class="nav-link {{ ($route == 'streamingservice.index')?'':'collapsed' }}" href="{{ route('streamingservice.index') }}">
+      <i class="fa-solid fa-layer-group"></i>
+      <span>Streaming Service</span>
+      </a>
+    </li><!-- End Streaming Service Nav -->
+
     <li class="nav-heading">User Management</li>
     <li class="nav-item">
       <a class="nav-link {{ ($route == 'admin.profile')?'':'collapsed' }}" href="{{ route('admin.profile') }}">

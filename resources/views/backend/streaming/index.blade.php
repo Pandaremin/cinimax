@@ -1,62 +1,45 @@
 @extends('backend.layout')
 @section('main')
 <div class="pagetitle">
-    <h1>Genre</h1>
+    <h1>Streaming Services</h1>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-            <li class="breadcrumb-item active">Genre</li>
+            <li class="breadcrumb-item active">Streaming Services</li>
         </ol>
     </nav>
 </div><!-- End Page Title -->
 
 <form action="" method="get">
     <div class="genre-add-search mt-4">
-        @can('isAdmin')
-        <a href="{{ route('genre.create') }}"><button type="button" class="btn btn-add" ><i class="fa-solid fa-plus me-1"></i></button></a>
-        @endcan
+        <a href="{{ route('streamingservice.create') }}"><button type="button" class="btn btn-add" ><i class="fa-solid fa-plus me-1"></i></button></a>
         <input type="text" class="form-control genre-input" name="search" placeholder="Search..." value="{{request('search')}}">
     </div>
 </form>
 
-@if($genres->isNotEmpty())
-<div class="card-headingg">
-    <div class="row">
-        <div class="col-1 text-center">
-        Id
-        </div>
-        <div class="col-9">
-        Title
-        </div>
-    </div>
-</div>
-
-@foreach($genres as $genre)
-    <form action="{{ route('genre.destroy',$genre->slug) }}" method="post">
+@forelse($streamingServices as $streamingService)
+    <form action="{{ route('streamingservice.destroy',$streamingService->id) }}" method="post">
     @csrf
     @method('DELETE')
         <div class="card-bodyy">
             <div class="row">
                 <div class="col-1 text-center">
-                    {{$genre->id}}
+                    {{$streamingService->id}}
                 </div>
                 <div class="col-9" style="font-weight:600;">
-                    {{$genre->title}}
+                    {{$streamingService->title}}
                 </div>
-                @can('isAdmin')
                 <div class="col-2 d-flex justify-content-center align-items-center">
-                    <a href="{{ route('genre.edit',$genre->slug) }}"><i class="fa-solid fa-pen-to-square me-3"></i></a>
+                    <a href="{{ route('streamingservice.edit',$streamingService->id) }}"><i class="fa-solid fa-pen-to-square me-3"></i></a>
                     <button type="submit" class="btn btncolor text-danger"><i class="fa-solid fa-trash me-4"></i></button>
                 </div>
-                @endcan
             </div>
         </div>
     </form>
     
-@endforeach
-@else 
+@empty 
     <div>
-        <h4>No genre found</h4>
+        <h4>No Server found</h4>
     </div>
-@endif
+@endforelse
 @endsection

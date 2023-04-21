@@ -14,6 +14,11 @@ use Alert;
 
 class MovieController extends Controller
 {
+    public function gate($movie)
+    {
+        return abort_if(Gate::none(['update','isAdmin'], $movie),403);
+    }
+    
     public function index(Request $request)
     {
         $movies = Content::with('user')->where('content_type', 'movie')->latest();
@@ -49,8 +54,7 @@ class MovieController extends Controller
 
     public function edit(Content $movie)
     {
-        abort_if(Gate::none(['update','isAdmin'], $movie),403);
-
+        $this->gate($movie);
         $data=Content::with(['genres','movielinks'])->find($movie->id);
         $genre = Genre::all();
         $streamingServices = StreamingService::all();
@@ -60,8 +64,7 @@ class MovieController extends Controller
 
     public function update(ContentRequest $request,Content $movie)
     {
-        abort_if(Gate::none(['update','isAdmin'], $movie),403);
-
+        $this->gate($movie);
         $validatedData = $request->safe()->except(['genre', 'linktitle','type','link']);
         $movie->slug = null;
         $movie->update($validatedData);
@@ -76,8 +79,7 @@ class MovieController extends Controller
 
     public function destroy(Content $movie)
     {
-        abort_if(Gate::none(['update','isAdmin'], $movie),403);
-        
+        $this->gate($movie);        
         $movie->genres()->detach();
         $movie->delete();
         Alert::toast('Movie deleted successfully');
